@@ -1,39 +1,39 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const path = require('path');
+    const express = require('express');
+    const dotenv = require('dotenv');
+    const path = require('path');
 
-// Inernal imports
-const connectDB = require('../config/database');
-const cookieParser = require('cookie-parser');
-const { notFound, errorHandler } = require('../middlewares/errorHandler');
-const router = require('../routes');
+    // Inernal imports
+    const connectDB = require('../config/database');
+    const cookieParser = require('cookie-parser');
+    const { notFound, errorHandler } = require('../middlewares/errorHandler');
+    const loginRoute = require('../routes/login.routes');
 
-const app = express();
-dotenv.config();
+    const app = express();
+    dotenv.config();
 
 
-// Database connection
-connectDB();
+    // Database connection
+    connectDB();
 
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser(process.env.COOKIE_SECRET));
+    // Middleware
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: false }));
+    app.use(cookieParser(process.env.COOKIE_SECRET));
 
-// Set the view engine to EJS
-app.set('view engine', 'ejs');
+    // Set the view engine to EJS
+    app.set('view engine', 'ejs');
 
-// Set the views directory
-app.set('views', path.join(__dirname, '..', 'views'));
+    // Set the views directory
+    app.set('views', path.join(__dirname, '..', 'views'));
 
 // Set static folder
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
-// Routing setup
-app.use("/", router);
+    // Routing setup
+    app.use("/", loginRoute);
 
-// Error handling
-app.use(notFound);
-app.use(errorHandler);
+    // Error handling
+    app.use(notFound);
+    app.use(errorHandler);
 
-module.exports = app;
+    module.exports = app;
